@@ -17,21 +17,34 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       # 本体（レイアウト・CSS・JS）を作業ディレクトリ直下に取得する
       - uses: actions/checkout@v4
         with:
           repository: kmmz532/blog
           path: .
+          fetch-depth: 1
+          persist-credentials: false
       # この記事リポジトリを posts/ に取得する
       - uses: actions/checkout@v4
         with:
           path: posts
+          fetch-depth: 1
+          persist-credentials: false
       - uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: "0.141.0"
           extended: true
-      - run: hugo --minify
+      # Hugo のキャッシュ（画像処理・fingerprint 済みアセット）を再利用する
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/hugo_cache
+          key: hugo-${{ hashFiles('assets/**', 'hugo.toml') }}
+          restore-keys: hugo-
+      - run: hugo --minify --gc
+        env:
+          HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
@@ -39,6 +52,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
