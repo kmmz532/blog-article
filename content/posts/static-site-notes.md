@@ -6,6 +6,8 @@ tags: ["hugo", "github-pages"]
 summary: "Hugo で静的サイトを組み立てたときの手順を、架空の例でまとめた記事です。"
 ---
 
+> **テスト記事**: 本番公開前に削除または書き換えます。
+
 Hugo のテンプレートは `layouts/_default/` に置くと、ほぼすべてのページで使われます。
 
 ```go-html-template
