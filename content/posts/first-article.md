@@ -4,7 +4,7 @@ date: 2026-10-29T18:53:00+09:00
 categories: ["その他"]
 tags: ["hugo","開発"]
 summary: ""
-lastmod: 2026-10-29T20:02:00+09:00
+lastmod: 2026-10-29T20:32:00+09:00
 aliases: ["/posts/hello-world/"]
 ---
 
@@ -48,3 +48,6 @@ Git管理しつつ、SSGで静的ウェブ配信できて、Web上から編集�
 - https://github.com/kmmz532/blog - 本体リポジトリ
 
 {{< link-card url="https://github.com/kmmz532/blog" >}}
+
+## 日記？
+関係ないけど明日は学祭準備だあ・・・
