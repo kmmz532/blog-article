@@ -1,0 +1,47 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  pages: write
+  id-token: write
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 本体（レイアウト・CSS・JS）を作業ディレクトリ直下に取得する
+      - uses: actions/checkout@v4
+        with:
+          repository: kmmz532/blog
+          path: .
+      # この記事リポジトリを posts/ に取得する
+      - uses: actions/checkout@v4
+        with:
+          path: posts
+      - uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: "0.122.0"
+          extended: true
+      - run: hugo --minify
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
