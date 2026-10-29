@@ -1,9 +1,9 @@
 ---
 title: "かみみずブログを開設しました！"
 date: 2026-10-01T09:00:00+09:00
-categories: ["misc"]
-tags: ["test","hugo"]
-summary: "テスト用に作成した架空の記事です。一覧・詳細・検索の動作確認に使います。"
+categories: ["その他"]
+tags: ["hugo","開発"]
+summary: ""
 lastmod: 2026-10-29T18:52:00+09:00
 ---
 
