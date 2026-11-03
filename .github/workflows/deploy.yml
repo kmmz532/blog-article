@@ -32,6 +32,11 @@ jobs:
           path: posts
           fetch-depth: 1
           persist-credentials: false
+      # Hugo Modules の取り込みに Go が要る（版は本体の go.mod の go 行に合わせる）
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
       - uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: "0.141.0"
@@ -40,7 +45,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ${{ runner.temp }}/hugo_cache
-          key: hugo-${{ hashFiles('assets/**', 'hugo.toml') }}
+          key: hugo-${{ hashFiles('assets/**', 'hugo.toml', 'go.sum') }}
           restore-keys: hugo-
       - run: hugo --minify --gc
         env:
