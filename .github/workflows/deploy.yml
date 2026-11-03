@@ -18,6 +18,9 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       # 本体（レイアウト・CSS・JS）を作業ディレクトリ直下に取得する
       - uses: actions/checkout@v4
@@ -32,11 +35,6 @@ jobs:
           path: posts
           fetch-depth: 1
           persist-credentials: false
-      # Hugo Modules の取り込みに Go が要る（版は本体の go.mod の go 行に合わせる）
-      - uses: actions/setup-go@v5
-        with:
-          go-version-file: go.mod
-          cache-dependency-path: go.sum
       - uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: "0.141.0"
@@ -53,14 +51,5 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
