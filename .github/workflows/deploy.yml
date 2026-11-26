@@ -18,9 +18,6 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       # 本体（レイアウト・CSS・JS）を作業ディレクトリ直下に取得する
       - uses: actions/checkout@v4
@@ -51,5 +48,15 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
+
+  # アーティファクトはジョブが終わってから確定するため、公開は別のジョブで行う（同じジョブだと見つからずに失敗することがある）
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
